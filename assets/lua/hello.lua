@@ -8,6 +8,7 @@ end
 function update(self, delta)
     self.position.x = self.position.x + 10
     self.position.y = self.position.y + 20
+
     --print(self.position)
 end
 
@@ -21,3 +22,4 @@ function anotherFunction(value)
     result = Call("Hack1", "someFunction", {value})
     print(result)
 end
+

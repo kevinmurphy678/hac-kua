@@ -42,7 +42,10 @@ public class LuaScript {
         }
         try {
             chunk = globals.load(Gdx.files.internal(scriptFileName).readString());
+
             registerJavaFunction(Call.getInstance());
+            //registerJavaFunction(CallNative.getInstance());
+
 
         } catch (LuaError e) {
             // If reading the file fails, then log the error to the console
