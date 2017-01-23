@@ -1,0 +1,24 @@
+
+uniform sampler2D u_texture0;
+varying vec2 v_texCoords;
+
+uniform vec2 center; // Mouse position
+uniform float time; // effect elapsed time
+uniform vec3 shockParams; // 10.0, 0.8, 0.1
+uniform vec2 resolution;
+
+void main() 
+{ 
+ 	vec2 uv = gl_FragCoord.xy / resolution.xy;
+	//uv.y = -uv.y;
+	vec2 mouse = center.xy / resolution.xy;
+	vec2 warp = normalize(center.xy - gl_FragCoord.xy) * pow(distance(center.xy, gl_FragCoord.xy), -2.0) * 700.0;
+	warp.y = -warp.y;
+	uv = uv + warp;
+	
+	float light = clamp(0.1*distance(center.xy, gl_FragCoord.xy) - 3.5, 0.0, 1.0);
+	
+	vec4 color = texture2D(u_texture0, uv);
+	gl_FragColor = color * light;
+	
+}

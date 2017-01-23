@@ -1,14 +1,12 @@
-
 function interact(self, user)
     print("WELL OK THEN")
     print(user.script.scriptFileName)
-
 end
 
 function update(self, delta)
     self.position.x = self.position.x + 10
     self.position.y = self.position.y + 20
-
+    print(self)
     --print(self.position)
 end
 

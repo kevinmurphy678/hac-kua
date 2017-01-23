@@ -1,0 +1,70 @@
+
+
+#ifdef GL_ES
+	#define PRECISION mediump
+	precision PRECISION float;
+#else
+	#define PRECISION
+#endif
+
+uniform sampler2D u_texture0;
+varying vec2 v_texCoords;
+
+uniform float pixelation;
+uniform float aspectRatio;
+uniform float nightvision;
+uniform float time;
+uniform float saturation;
+
+const vec3 GRAYSCALE = vec3(0.3, 0.59, 0.11);
+vec3 adjustSaturation(vec3 color, float saturation)
+{
+	vec3 grey = vec3(dot(color, GRAYSCALE));
+	//vec3 grey = vec3((color.r+color.g+color.b)*0.333);
+	return mix(grey, color, saturation);
+}
+
+void main() 
+{
+	vec3 satColor = adjustSaturation(texture2D(u_texture0, v_texCoords).rgb, saturation);
+	
+	if(pixelation>0.)
+	{
+		float dx = pixelation*(1./2048.);
+		float dy = pixelation*(1./2048.)*aspectRatio;
+		
+		vec2 coord = vec2(dx*floor(v_texCoords.x/dx),dy*floor(v_texCoords.y/dy));
+		
+		gl_FragColor = vec4(texture2D(u_texture0, coord).rgb,1);
+	}
+	else
+	{
+
+	if(nightvision==1.)
+	{
+		vec3 finalColor;
+	 	vec3 col = satColor;
+	 	vec2 uv = v_texCoords;
+	 	col = clamp(col*0.5+0.5*col*col*1.2,0.0,1.0);
+		col *= 0.5 + 0.5*16.0*uv.x*uv.y*(1.0-uv.x)*(1.0-uv.y);
+		col *= vec3(0.8,1.0,0.7);
+		col *= 0.9+0.1*sin(10.0*time+uv.y*1000.0);
+		col *= 0.97+0.03*sin(110.0*time);
+	 	
+	    col *= 1.25; 
+	    vec3 visionColor = vec3(0.1, 0.95, 0.2);
+	    finalColor.rgb = (col * visionColor * 1.);	   
+	    gl_FragColor = vec4(finalColor.rgb,1);
+    }
+    else
+    {
+    	vec2 coord = vec2((v_texCoords.x),(v_texCoords.y));
+		vec4 color = vec4(satColor,1.0);	
+		gl_FragColor = color;
+    }
+
+}
+	
+
+
+}

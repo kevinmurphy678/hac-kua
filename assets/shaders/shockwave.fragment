@@ -1,0 +1,32 @@
+
+uniform sampler2D u_texture0;
+varying vec2 v_texCoords;
+
+uniform vec2 center; // Mouse position
+uniform float time; // effect elapsed time
+uniform vec3 shockParams; // 10.0, 0.8, 0.1
+uniform vec2 resolution;
+
+void main() 
+{ 
+  vec2 uv = v_texCoords.xy;
+  vec2 uvMod = uv;
+  uvMod.x *= resolution.x / resolution.y;
+  vec2 newCenter = vec2(center.x, center.y);
+  newCenter.x *= resolution.x / resolution.y;
+  //center.x *=  resolution.x / resolution.y;
+  
+  vec2 texCoord = uv;
+  float distance = distance(uvMod, newCenter);
+  if ( (distance <= (time + shockParams.z)) && 
+       (distance >= (time - shockParams.z)) ) 
+  {
+    float diff = (distance - time); 
+    float powDiff = 1.0 - pow(abs(diff*shockParams.x), shockParams.y); 
+    float diffTime = diff  * powDiff; 
+    vec2 diffUV = normalize(uvMod - newCenter); 
+    texCoord = uv + (diffUV * diffTime);
+  } 
+  
+  gl_FragColor = texture2D(u_texture0, texCoord);
+}
