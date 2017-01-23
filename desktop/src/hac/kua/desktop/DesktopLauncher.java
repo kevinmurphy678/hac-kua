@@ -13,8 +13,8 @@ public class DesktopLauncher {
 //		int width = gd.getDisplayMode().getWidth();
 //		int height = gd.getDisplayMode().getHeight();
 		config.title = "hackua";
-		config.width = 640;
-		config.height= 480;
+		config.width = 1600;
+		config.height= 900;
 		config.vSyncEnabled=false;
 		config.foregroundFPS=1000;
 				new LwjglApplication(new HacKua(), config);

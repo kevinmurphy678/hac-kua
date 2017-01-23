@@ -19,16 +19,35 @@ public class LuaScript {
     // Keep the file name, so it can be reloaded when needed
     public String scriptFileName;
 
+
     // Init the object and call the load method
     public LuaScript(String scriptFileName) {
         this(scriptFileName, JsePlatform.standardGlobals());
     }
 
     public LuaScript(String scriptFileName, Globals globals){
+
         this.scriptFileExists = false;
         this.globals = globals;
         this.load(scriptFileName);
     }
+
+
+    public boolean loadString(String data)
+    {
+        try {
+            chunk = globals.load(data);
+            registerJavaFunction(Call.getInstance());
+        } catch (LuaError e) {
+            // If reading the file fails, then log the error to the console
+            Gdx.app.log("Debug", "LUA ERROR! " + e.getMessage());
+            this.scriptFileExists = false;
+            return false;
+        }
+        chunk.call();
+        return true;
+    }
+
 
     // Load the file
     public boolean load(String scriptFileName) {

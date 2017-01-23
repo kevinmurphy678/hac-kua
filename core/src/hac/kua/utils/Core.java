@@ -3,25 +3,36 @@ package hac.kua.utils;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeType;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.kotcrab.vis.ui.VisUI;
+import com.kotcrab.vis.ui.util.TableUtils;
+import com.kotcrab.vis.ui.util.highlight.Highlighter;
+import com.kotcrab.vis.ui.widget.HighlightTextArea;
+import com.kotcrab.vis.ui.widget.VisTable;
+import com.kotcrab.vis.ui.widget.VisTextButton;
+import com.kotcrab.vis.ui.widget.VisWindow;
+import hac.kua.screens.PlayingScreen;
 
 /**
  * Created by kevin on 1/21/2017.
  * Helper class to store static and instance objects
  */
 public class Core {
-
-
     //Fonts
     public static BitmapFont font;
     public static GlyphLayout fontLayout;
@@ -35,7 +46,6 @@ public class Core {
 
         generator.dispose();
     }
-
 
     //Assets
     public static AssetManager assets;
@@ -63,23 +73,9 @@ public class Core {
         }
         skin.load(fileHandle);
 
-//        Window codeWindow = new Window("Code", skin);
-//        TextArea codeEditor = new TextArea("Editor", skin);
-//        codeWindow.setSize(1024,1024);
-//        codeWindow.setResizable(true);
-//        codeEditor.setFillParent(true);
-//        //codeEditor.setSize(1024,1024);
-//       // codeEditor.setPosition(stage.getWidth()/2 - codeEditor.getWidth()/2 ,stage.getHeight()/2 - codeEditor.getHeight() / 2);
-//        String text = Gdx.files.internal("assets/lua/hello.lua").readString();
-//
-//        //text = text.replace("function", "[ORANGE]function[WHITE]");
-//        //text = text.replace("end", "[ORANGE]end[WHITE]");
-//
-//        codeEditor.setText(text);
-//
-//        codeWindow.addActor(codeEditor);
-//
-//        stage.addActor(codeWindow);
     }
+
+
+
 
 }

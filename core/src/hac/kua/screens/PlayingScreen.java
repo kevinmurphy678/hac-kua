@@ -13,13 +13,16 @@ import com.badlogic.gdx.graphics.g3d.decals.CameraGroupStrategy;
 import com.badlogic.gdx.graphics.g3d.decals.Decal;
 import com.badlogic.gdx.graphics.g3d.decals.DecalBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bitfire.postprocessing.PostProcessor;
 import com.bitfire.utils.ShaderLoader;
+import com.kotcrab.vis.ui.VisUI;
 import hac.kua.hackable.Hackable;
 import hac.kua.hackable.Hackable_Manager;
 import hac.kua.hackable.MovingThing;
+import hac.kua.utils.CodeEditor;
 import hac.kua.utils.Core;
 
 
@@ -39,15 +42,12 @@ public class PlayingScreen implements Screen{
 
     private PerspectiveCamera camera3D;
 
+   private PostProcessor postProcessor;
 
-
-    private PostProcessor postProcessor;
-
-    private Hackable hackable1;
-    private Hackable hackable2;
+    public static Hackable hackable1;
+    public static Hackable hackable2;
 
     private DecalBatch dBatch;
-
 
 
     @Override
@@ -59,10 +59,7 @@ public class PlayingScreen implements Screen{
 
         camera = new OrthographicCamera();
         viewport = new FillViewport(640,480,camera);
-
-
         batch = new SpriteBatch();
-
 
         hackable1 = new MovingThing();
         hackable2 = new MovingThing();
@@ -81,10 +78,9 @@ public class PlayingScreen implements Screen{
 
         dBatch = new DecalBatch(new CameraGroupStrategy(camera3D));
 
-        asfasf = new TextureRegion(new Texture(Gdx.files.internal("assets/text.png")));
+        CodeEditor editor = new CodeEditor(hackable1);
 
     }
-TextureRegion asfasf = new TextureRegion();
     @Override
     public void render(float delta) {
 
@@ -94,51 +90,23 @@ TextureRegion asfasf = new TextureRegion();
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
         Gdx.gl.glEnable(GL20.GL_DEPTH_TEST);
 
-        //postProcessor.capture();
-       // postProcessor.setClearColor(0.1f, 0.2f, 0.1f, 0.9f);
+        postProcessor.capture();
+        postProcessor.setClearColor(0.1f, 0.2f, 0.1f, 0.9f);
 
         //World drawing/////////
-//        camera.update();
-//        batch.setProjectionMatrix(camera.combined);
-//        batch.begin();
-//        for(ObjectMap.Entry<String, Hackable> entry : Hackable_Manager.hackables)
-//        {
-//            entry.value.update(Gdx.graphics.getDeltaTime());
-//            entry.value.draw(batch);
-//        }
-//
-//        batch.end();
-        ///////////////////////
+        camera.update();
+        batch.setProjectionMatrix(camera.combined);
+        batch.begin();
+        for(ObjectMap.Entry<String, Hackable> entry : Hackable_Manager.hackables)
+        {
+            entry.value.update(Gdx.graphics.getDeltaTime());
+            entry.value.draw(batch);
+        }
+
+        batch.end();
+        /////////////////////
 
         camera3D.update();
-        int decals = 0;
-        for(int x = 0; x < 10; x++)
-            for(int y = 0; y < 10; y++)
-            {
-                if(x==0 || x ==9 || y==0 ||y ==9) {
-                    for(int z = 0; z < 256; z++) {
-                        Decal test = Decal.newDecal(16,16,asfasf,true);
-                        test.setColor(z/256f,z/256f,z/256f,1);
-                        test.setPosition(x * 16, y * 16, z * 1/8f);
-                        dBatch.add(test);
-                        decals++;
-                    }
-                }
-            }
-
-        if(Gdx.input.isButtonPressed(Input.Buttons.RIGHT))
-        {
-            camera3D.translate(Gdx.input.getDeltaX(), Gdx.input.getDeltaY(), 0);
-        }
-
-
-        if(Gdx.input.isButtonPressed(Input.Buttons.LEFT))
-        {
-            camera3D.rotate(Gdx.input.getDeltaY(),1,0,0);
-            camera3D.rotate(Gdx.input.getDeltaX(),0,1,0);
-        }
-        //test.lookAt(camera3D.position, camera3D.up);
-
         dBatch.flush();
 
         //Stage & HUD Drawing///////
@@ -148,10 +116,8 @@ TextureRegion asfasf = new TextureRegion();
         stage.draw();
         stage.act(delta);
 
-
         stage.getBatch().begin();
         Core.font.draw(stage.getBatch(), "FPS: " + Gdx.graphics.getFramesPerSecond(), 100,50);
-        Core.font.draw(stage.getBatch(), "Decals: " + decals, 100,100);
         stage.getBatch().end();
         ////////////////////////
 
