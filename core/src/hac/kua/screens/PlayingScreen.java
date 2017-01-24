@@ -1,16 +1,12 @@
 package hac.kua.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g3d.decals.CameraGroupStrategy;
-import com.badlogic.gdx.graphics.g3d.decals.Decal;
 import com.badlogic.gdx.graphics.g3d.decals.DecalBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.ObjectMap;
@@ -18,7 +14,6 @@ import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bitfire.postprocessing.PostProcessor;
 import com.bitfire.utils.ShaderLoader;
-import com.kotcrab.vis.ui.VisUI;
 import hac.kua.hackable.Hackable;
 import hac.kua.hackable.Hackable_Manager;
 import hac.kua.hackable.MovingThing;
@@ -31,7 +26,6 @@ import hac.kua.utils.Core;
  * Main playing screen.
  */
 
-
 public class PlayingScreen implements Screen{
 
     private SpriteBatch batch;
@@ -42,7 +36,7 @@ public class PlayingScreen implements Screen{
 
     private PerspectiveCamera camera3D;
 
-   private PostProcessor postProcessor;
+    private PostProcessor postProcessor;
 
     public static Hackable hackable1;
     public static Hackable hackable2;
@@ -120,10 +114,7 @@ public class PlayingScreen implements Screen{
         Core.font.draw(stage.getBatch(), "FPS: " + Gdx.graphics.getFramesPerSecond(), 100,50);
         stage.getBatch().end();
         ////////////////////////
-
-
         //postProcessor.render();
-
     }
 
     @Override

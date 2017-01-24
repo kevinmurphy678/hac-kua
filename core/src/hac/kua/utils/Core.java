@@ -3,30 +3,14 @@ package hac.kua.utils;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeType;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
-import com.badlogic.gdx.scenes.scene2d.ui.Window;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.kotcrab.vis.ui.VisUI;
-import com.kotcrab.vis.ui.util.TableUtils;
-import com.kotcrab.vis.ui.util.highlight.Highlighter;
-import com.kotcrab.vis.ui.widget.HighlightTextArea;
-import com.kotcrab.vis.ui.widget.VisTable;
-import com.kotcrab.vis.ui.widget.VisTextButton;
-import com.kotcrab.vis.ui.widget.VisWindow;
-import hac.kua.screens.PlayingScreen;
 
 /**
  * Created by kevin on 1/21/2017.
@@ -49,7 +33,7 @@ public class Core {
 
     //Assets
     public static AssetManager assets;
-    public static Texture pixel;
+    public static Texture pixel;//Temp
     public static void setupAssets(){
         assets = new AssetManager();
         pixel = new Texture(Gdx.files.internal("assets/pixel.png"));
@@ -74,8 +58,5 @@ public class Core {
         skin.load(fileHandle);
 
     }
-
-
-
 
 }

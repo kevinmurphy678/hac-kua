@@ -3,6 +3,8 @@ package hac.kua.utils;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
@@ -59,7 +61,7 @@ public class CodeEditor {
         VisUI.load();
 
         codeEditor = new HighlightTextArea("Code");
-        stage.addActor(codeEditor);
+
 
         codeWindow = new VisWindow(Hackable_Manager.hackables.findKey(hackable,false));
         codeWindow.setSize(600,832);
@@ -68,7 +70,7 @@ public class CodeEditor {
         TableUtils.setSpacingDefaults(codeWindow);
 
 
-        codeWindow.add(codeEditor.createCompatibleScrollPane()).grow().colspan(20).row();
+        codeWindow.add(codeEditor.createCompatibleScrollPane()).grow().row();
         VisTable buttonsTable = new VisTable(true);
 
 
@@ -98,14 +100,56 @@ public class CodeEditor {
 
         //Set Text
         String text = Gdx.files.internal("assets/lua/hello.lua").readString();
+        text = text.replace("\r", "");
         codeEditor.setText(text);
+        codeEditor.setFocusTraversal(false);
+
+
+
+
+        codeEditor.addListener(new InputListener(){
+
+            @Override
+            public boolean keyDown(InputEvent event, int keycode) {
+//                if(keycode == 66)
+//                {
+//                    String[] lines = codeEditor.getText().split("\n");
+//
+//                    if(lines.length > codeEditor.getCursorLine()) {
+//                        if (lines[codeEditor.getCursorLine()].startsWith("    ")) {
+//                            lines[codeEditor.getCursorLine()+1] = "    " + lines[codeEditor.getCursorLine()+1]; //Add 4 spaces to start
+//                            final StringBuilder builder = new StringBuilder();
+//                            for(String line : lines) builder.append(line + "\n");
+//                            codeEditor.setText(builder.toString());
+//                        }
+//                    }
+//                }
+                return super.keyDown(event, keycode);
+            }
+
+            @Override
+           public boolean keyTyped(InputEvent event, char character) {
+
+                if(character == '\t')
+                {
+                    codeEditor.appendText("    ");
+                }
+
+
+
+               return super.keyTyped(event, character);
+           }
+         });
+
 
         //Highlighting
         Highlighter highlighter = new Highlighter();
         //it is much more reliable to use regex for keyword detection
         highlighter.regex(Color.valueOf("66CCB3"), "\\b(and|end|in|repeat|break|false|local|return|do|for|nil|then|else|function|not|true|elseif|if|or|until|while)\\b");
-        highlighter.regex(Color.valueOf("BED6FF"), "\\b(int|float|boolean|short|long|char)\\b");
-        highlighter.regex(Color.valueOf("75715E"), "/\\*(?:.|[\\n\\r])*?\\*/"); //block comments (/* comment */)
+        highlighter.regex(Color.CHARTREUSE, "\"(.*?)\"");
+        highlighter.regex(Color.valueOf("75715E"), "(?=--)(.*)(?=[\\r\\n])\n");
+
+
         codeEditor.setHighlighter(highlighter);
 
         stage.addActor(codeWindow);

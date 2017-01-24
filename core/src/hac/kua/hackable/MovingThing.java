@@ -9,9 +9,9 @@ import org.luaj.vm2.lib.jse.JsePlatform;
 
 /**
  * Created by kevin on 1/21/2017.
+ * Basic moving thing
  */
 public class MovingThing extends Hackable {
-
 
     public Vector2 position = new Vector2();
 

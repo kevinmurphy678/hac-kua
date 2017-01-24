@@ -9,6 +9,9 @@ import hac.kua.scripts.LuaScript;
  */
 public abstract class Hackable implements  Hackable_Interface {
 
+    public LuaScript script;
+    public Hackable(){}
+
     @Override
     public void interact(Hackable user) {
         script.executeFunction("interact", this, user);
@@ -25,7 +28,4 @@ public abstract class Hackable implements  Hackable_Interface {
     public void draw(Batch batch) {
 
     }
-
-    public LuaScript script;
-    public Hackable(){}
 }
