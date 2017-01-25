@@ -17,7 +17,7 @@ import com.bitfire.utils.ShaderLoader;
 import hac.kua.hackable.Hackable;
 import hac.kua.hackable.Hackable_Manager;
 import hac.kua.hackable.MovingThing;
-import hac.kua.utils.CodeEditor;
+import hac.kua.desktop.CodeEditor;
 import hac.kua.utils.Core;
 
 

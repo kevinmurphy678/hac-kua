@@ -19,6 +19,9 @@ public class LuaScript {
     // Keep the file name, so it can be reloaded when needed
     public String scriptFileName;
 
+    //Current script contents
+    public String scriptContents = null;
+
 
     // Init the object and call the load method
     public LuaScript(String scriptFileName) {
@@ -29,12 +32,12 @@ public class LuaScript {
 
         this.scriptFileExists = false;
         this.globals = globals;
+
         this.load(scriptFileName);
     }
 
 
-    public boolean loadString(String data)
-    {
+    public boolean loadString(String data) {
         try {
             chunk = globals.load(data);
             registerJavaFunction(Call.getInstance());
@@ -45,6 +48,7 @@ public class LuaScript {
             return false;
         }
         chunk.call();
+        this.scriptContents = data;
         return true;
     }
 

@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.kotcrab.vis.ui.VisUI;
 
 /**
  * Created by kevin on 1/21/2017.
@@ -46,17 +47,22 @@ public class Core {
     public static Skin skin;
     public static void setupStage()
     {
+
         stage = new Stage();
         stage = new Stage(new ScreenViewport());
         skin = new Skin();
+
         skin.add("default-font", font, BitmapFont.class);
+        skin.add("small-font", font, BitmapFont.class);
         FileHandle fileHandle = Gdx.files.internal("assets/uiskin.json");
         FileHandle atlasFile = Gdx.files.internal("assets/uiskin.atlas");
+
         if (atlasFile.exists()) {
             skin.addRegions(new TextureAtlas(atlasFile));
         }
-        skin.load(fileHandle);
 
+        skin.load(fileHandle);
+        VisUI.load(skin);
     }
 
 }

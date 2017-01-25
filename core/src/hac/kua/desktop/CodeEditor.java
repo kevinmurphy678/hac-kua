@@ -1,4 +1,4 @@
-package hac.kua.utils;
+package hac.kua.desktop;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -17,14 +17,13 @@ import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.kotcrab.vis.ui.widget.VisWindow;
 import hac.kua.hackable.Hackable;
 import hac.kua.hackable.Hackable_Manager;
+import hac.kua.utils.Core;
 
 /**
  * Created by kevin on 1/23/2017.
  * Code editor for editing lua scripts of Hackable objects
  */
 public class CodeEditor {
-
-
     //The hackable currently being edited
     private Hackable hackable;
 
@@ -35,7 +34,14 @@ public class CodeEditor {
     public CodeEditor(Hackable hackable)
     {
         this.hackable = hackable;
-        this.originalScript = Gdx.files.internal(hackable.script.scriptFileName).readString();
+
+        if(hackable.script.scriptContents == null)
+            this.originalScript = Gdx.files.internal(hackable.script.scriptFileName).readString();
+        else
+            this.originalScript = hackable.script.scriptContents;
+        
+        this.originalScript =  this.originalScript.replace("\r", "");
+
         setupEditor(Core.stage);
     }
 
@@ -55,24 +61,19 @@ public class CodeEditor {
     {
 
     }
-
     private void setupEditor(Stage stage)
     {
-        VisUI.load();
-
         codeEditor = new HighlightTextArea("Code");
 
-
         codeWindow = new VisWindow(Hackable_Manager.hackables.findKey(hackable,false));
+        codeWindow.addCloseButton();
         codeWindow.setSize(600,832);
         codeWindow.setPosition(977,41);
         codeWindow.setResizable(true);
         TableUtils.setSpacingDefaults(codeWindow);
 
-
         codeWindow.add(codeEditor.createCompatibleScrollPane()).grow().row();
         VisTable buttonsTable = new VisTable(true);
-
 
         //Compile Button
         VisTextButton buttonCompile = new VisTextButton("Compile");
@@ -83,7 +84,6 @@ public class CodeEditor {
             }
         });
         buttonsTable.add(buttonCompile);
-
 
         //Reset Button
         VisTextButton buttonReset = new VisTextButton("Reset");
@@ -104,9 +104,6 @@ public class CodeEditor {
         codeEditor.setText(text);
         codeEditor.setFocusTraversal(false);
 
-
-
-
         codeEditor.addListener(new InputListener(){
 
             @Override
@@ -123,19 +120,25 @@ public class CodeEditor {
 //                            codeEditor.setText(builder.toString());
 //                        }
 //                    }
+//
 //                }
-                return super.keyDown(event, keycode);
+               return super.keyDown(event, keycode);
             }
 
             @Override
            public boolean keyTyped(InputEvent event, char character) {
-
-                if(character == '\t')
-                {
-                    codeEditor.appendText("    ");
-                }
-
-
+//                if(character == '\t')
+//                {
+//                    String[] lines = codeEditor.getText().split("\n");
+//
+//                    if(lines.length > codeEditor.getCursorLine()) {
+//                        lines[codeEditor.getCursorLine()]
+//                        final StringBuilder builder = new StringBuilder();
+//                        for(String line : lines) builder.append(line + "\n");
+//                        codeEditor.setText(builder.toString());
+//
+//                    }
+//                }
 
                return super.keyTyped(event, character);
            }
@@ -148,10 +151,7 @@ public class CodeEditor {
         highlighter.regex(Color.valueOf("66CCB3"), "\\b(and|end|in|repeat|break|false|local|return|do|for|nil|then|else|function|not|true|elseif|if|or|until|while)\\b");
         highlighter.regex(Color.CHARTREUSE, "\"(.*?)\"");
         highlighter.regex(Color.valueOf("75715E"), "(?=--)(.*)(?=[\\r\\n])\n");
-
-
         codeEditor.setHighlighter(highlighter);
-
         stage.addActor(codeWindow);
     }
 }
