@@ -37,6 +37,7 @@ public class LuaScript {
     }
 
 
+    //Loads string data into the script
     public boolean loadString(String data) {
         try {
             chunk = globals.load(data);

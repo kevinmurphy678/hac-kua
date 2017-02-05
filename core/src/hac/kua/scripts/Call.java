@@ -45,6 +45,7 @@ public final class Call extends TwoArgFunction {
             for (int i = 0; i < luaTable.length(); i++) {
                 objectArray[i] = luaTable.get(i + 1);
             }
+
             // Run the Lua function functionName in script file key and pass the parameters to it, convert the result to a form that Lua can use
             return Hackable_Manager.hackables.get(key.toString()).script.executeFunctionParamsAsArray(functionName.toString(), objectArray);
         }

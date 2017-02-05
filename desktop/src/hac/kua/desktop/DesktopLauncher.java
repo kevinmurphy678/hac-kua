@@ -8,6 +8,7 @@ import java.awt.*;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {
+
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 //		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 //		int width = gd.getDisplayMode().getWidth();
@@ -17,6 +18,6 @@ public class DesktopLauncher {
 		config.height= 900;
 		config.vSyncEnabled=false;
 		config.foregroundFPS=1000;
-				new LwjglApplication(new HacKua(), config);
+		new LwjglApplication(new HacKua(), config);
 	}
 }

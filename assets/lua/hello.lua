@@ -18,3 +18,4 @@ function anotherFunction(value)
     result = Call("Hack1", "someFunction", {value})
     print(result)
 end
+

@@ -39,7 +39,7 @@ public class CodeEditor {
             this.originalScript = Gdx.files.internal(hackable.script.scriptFileName).readString();
         else
             this.originalScript = hackable.script.scriptContents;
-        
+
         this.originalScript =  this.originalScript.replace("\r", "");
 
         setupEditor(Core.stage);

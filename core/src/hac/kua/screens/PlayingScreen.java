@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bitfire.postprocessing.PostProcessor;
 import com.bitfire.utils.ShaderLoader;
+import hac.kua.GameMap;
 import hac.kua.hackable.Hackable;
 import hac.kua.hackable.Hackable_Manager;
 import hac.kua.hackable.MovingThing;
@@ -41,7 +42,7 @@ public class PlayingScreen implements Screen{
     public static Hackable hackable1;
     public static Hackable hackable2;
 
-    private DecalBatch dBatch;
+   public GameMap gameMap;
 
 
     @Override
@@ -70,7 +71,9 @@ public class PlayingScreen implements Screen{
         camera3D.far = 30000;
         camera3D.position.set(0, 0, 128);
 
-        dBatch = new DecalBatch(new CameraGroupStrategy(camera3D));
+        gameMap = new GameMap();
+
+        //dBatch = new DecalBatch(new CameraGroupStrategy(camera3D));
 
         CodeEditor editor = new CodeEditor(hackable1);
 
@@ -87,21 +90,26 @@ public class PlayingScreen implements Screen{
         postProcessor.capture();
         postProcessor.setClearColor(0.1f, 0.2f, 0.1f, 0.9f);
 
-        //World drawing/////////
+        //2D drawing/////////
         camera.update();
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
+
         for(ObjectMap.Entry<String, Hackable> entry : Hackable_Manager.hackables)
         {
             entry.value.update(Gdx.graphics.getDeltaTime());
             entry.value.draw(batch);
         }
 
+        gameMap.draw(batch);
+
         batch.end();
         /////////////////////
 
+
+        //3D Drawing
         camera3D.update();
-        dBatch.flush();
+
 
         //Stage & HUD Drawing///////
         Stage stage = Core.stage;
