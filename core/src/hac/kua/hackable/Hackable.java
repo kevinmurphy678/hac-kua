@@ -9,8 +9,6 @@ import hac.kua.scripts.LuaScript;
  */
 public abstract class Hackable implements Hackable_Interface, Runnable{
 
-    private Thread interactThread;
-
     private boolean running = true;
     public LuaScript script;
     public Hackable(){}
@@ -19,7 +17,7 @@ public abstract class Hackable implements Hackable_Interface, Runnable{
     public void run() {
         while(running) {
 
-            if(!script.interruptManager.interrupted)
+            if(!script.interruptManager.isInterrupted())
             update();
 
             try {
@@ -30,17 +28,17 @@ public abstract class Hackable implements Hackable_Interface, Runnable{
 
 
     public  void interact() {
-        if(!script.interruptManager.interrupted)  new Thread(() -> script.executeFunction("interact", this, null)).start();
+        if(!script.interruptManager.isInterrupted())  new Thread(() -> script.executeFunction("interact", this, null)).start();
     }
 
     @Override
     public  void interact(Hackable user) {
-        if(!script.interruptManager.interrupted) new Thread(() -> script.executeFunction("interact", this, user)).start();
+        if(!script.interruptManager.isInterrupted()) new Thread(() -> script.executeFunction("interact", this, user)).start();
     }
 
     @Override
     public void update() {
-        if(!script.interruptManager.interrupted) script.executeFunction("update", this);
+        if(!script.interruptManager.isInterrupted()) script.executeFunction("update", this);
     }
 
 

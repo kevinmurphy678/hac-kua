@@ -54,8 +54,7 @@ public class CodeEditor {
         }
 
         hackable.script.interrupted=false;
-        hackable.script.interruptManager.interrupted = false;
-
+        hackable.script.interruptManager.setInterrupted(false);
 
         if(hackable.script.loadString(codeEditor.getText()))
         {
@@ -66,9 +65,8 @@ public class CodeEditor {
         {
             statusLabel.setColor(Color.ORANGE);
             statusLabel.setText("Status: Compile failed");
-            hackable.script.interruptManager.interrupted = true;
+            hackable.script.interruptManager.setInterrupted(true);
         }
-
 
     }
 

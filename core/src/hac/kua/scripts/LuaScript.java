@@ -24,7 +24,8 @@ public class LuaScript {
 
     //Allows lua script interruption in case of infinite loop..
     public InterruptManager interruptManager;
-    //For knowing when the script is interrupted
+
+    //For knowing when the script is actually interrupted
     public Boolean interrupted = false;
 
     // Init the object and call the load method
@@ -43,7 +44,7 @@ public class LuaScript {
     //Forces the script to stop, in case of infinite loop
     public void forceInterruption()
     {
-        interruptManager.interrupted = true;
+        interruptManager.setInterrupted(true);
     }
 
     //Loads string data into the script
@@ -54,8 +55,6 @@ public class LuaScript {
         } catch (LuaError e) {
             // If reading the file fails, then log the error to the console
             Gdx.app.log("Debug", "LUA ERROR! " + e.getMessage());
-
-
 
             return false;
         }
