@@ -22,6 +22,10 @@ public class LuaScript {
     //Current script contents
     public String scriptContents = null;
 
+    //Allows lua script interruption in case of infinite loop..
+    public InterruptManager interruptManager;
+    //For knowing when the script is interrupted
+    public Boolean interrupted = false;
 
     // Init the object and call the load method
     public LuaScript(String scriptFileName) {
@@ -29,13 +33,18 @@ public class LuaScript {
     }
 
     public LuaScript(String scriptFileName, Globals globals){
-
         this.scriptFileExists = false;
         this.globals = globals;
-
+        interruptManager = new InterruptManager();
+        this.globals.load(interruptManager);
         this.load(scriptFileName);
     }
 
+    //Forces the script to stop, in case of infinite loop
+    public void forceInterruption()
+    {
+        interruptManager.interrupted = true;
+    }
 
     //Loads string data into the script
     public boolean loadString(String data) {
@@ -45,10 +54,19 @@ public class LuaScript {
         } catch (LuaError e) {
             // If reading the file fails, then log the error to the console
             Gdx.app.log("Debug", "LUA ERROR! " + e.getMessage());
-            this.scriptFileExists = false;
+
+
+
             return false;
         }
-        chunk.call();
+        try {
+            chunk.call();
+        }
+        catch(RuntimeException e)
+        {
+            interrupted = true;
+        }
+
         this.scriptContents = data;
         return true;
     }

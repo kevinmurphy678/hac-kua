@@ -41,8 +41,7 @@ public class PlayingScreen implements Screen{
 
     public static Hackable hackable1;
     public static Hackable hackable2;
-
-   public GameMap gameMap;
+    public GameMap gameMap;
 
 
     @Override
@@ -63,7 +62,7 @@ public class PlayingScreen implements Screen{
 
         //Adding to global hackables list
         Hackable_Manager.add("Hack1", hackable1);
-        Hackable_Manager.add("Hack2", hackable2);
+        //Hackable_Manager.add("Hack2", hackable2);
 
         camera3D = new PerspectiveCamera(80, 640, 480);
         camera3D.position.set(0,0,-5);
@@ -74,15 +73,17 @@ public class PlayingScreen implements Screen{
         gameMap = new GameMap();
 
         //dBatch = new DecalBatch(new CameraGroupStrategy(camera3D));
-
         CodeEditor editor = new CodeEditor(hackable1);
-
     }
     @Override
     public void render(float delta) {
 
+        //Updates / input logic
+        handleInput();
         Core.assets.update();
 
+
+        //Graphics
         Gdx.gl.glClearColor(0.5f,0.45f,0.6f,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
         Gdx.gl.glEnable(GL20.GL_DEPTH_TEST);
@@ -95,9 +96,9 @@ public class PlayingScreen implements Screen{
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
 
+        //Draw hackables
         for(ObjectMap.Entry<String, Hackable> entry : Hackable_Manager.hackables)
         {
-            entry.value.update(Gdx.graphics.getDeltaTime());
             entry.value.draw(batch);
         }
 
@@ -106,10 +107,8 @@ public class PlayingScreen implements Screen{
         batch.end();
         /////////////////////
 
-
         //3D Drawing
         camera3D.update();
-
 
         //Stage & HUD Drawing///////
         Stage stage = Core.stage;
@@ -124,6 +123,18 @@ public class PlayingScreen implements Screen{
         ////////////////////////
         //postProcessor.render();
     }
+
+    public void handleInput()
+    {
+        if(Gdx.input.justTouched())
+        {
+            hackable1.interact();
+        }
+
+
+    }
+
+
 
     @Override
     public void resize(int width, int height) {

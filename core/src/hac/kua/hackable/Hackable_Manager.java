@@ -1,6 +1,10 @@
 package hac.kua.hackable;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.utils.ObjectMap;
+import org.luaj.vm2.Globals;
+import org.luaj.vm2.lib.DebugLib;
 
 /**
  * Created by kevin on 1/21/2017.
@@ -8,6 +12,8 @@ import com.badlogic.gdx.utils.ObjectMap;
  * Each Hackable will be associated with a string. Two hackables cannot share the same key
  */
 public final class Hackable_Manager {
+
+
 
     public static ObjectMap<String, Hackable> hackables = new ObjectMap<String, Hackable>();
 
@@ -23,6 +29,10 @@ public final class Hackable_Manager {
             return;
         }
         hackables.put(key, obj);
+        new Thread(obj).start();
     }
+
+
+
 }
 

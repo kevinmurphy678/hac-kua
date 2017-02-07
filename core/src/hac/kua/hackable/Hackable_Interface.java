@@ -8,8 +8,10 @@ import hac.kua.scripts.LuaScript;
  */
 public interface Hackable_Interface {
 
+
     void interact(Hackable user);
-    void update(float delta);
+    void update();
     void draw(Batch batch);
+
 
 }

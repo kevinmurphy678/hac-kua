@@ -8,13 +8,9 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
-import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.util.TableUtils;
 import com.kotcrab.vis.ui.util.highlight.Highlighter;
-import com.kotcrab.vis.ui.widget.HighlightTextArea;
-import com.kotcrab.vis.ui.widget.VisTable;
-import com.kotcrab.vis.ui.widget.VisTextButton;
-import com.kotcrab.vis.ui.widget.VisWindow;
+import com.kotcrab.vis.ui.widget.*;
 import hac.kua.hackable.Hackable;
 import hac.kua.hackable.Hackable_Manager;
 import hac.kua.utils.Core;
@@ -46,21 +42,57 @@ public class CodeEditor {
     }
 
     //Compile Button
-    private void Compile()
+    private void compile()
     {
-        hackable.script.loadString(codeEditor.getText());
+        //If our script was interrupted / stopped, allow it to run again
+        interrupt();
+
+        try {
+            Thread.sleep(250);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        hackable.script.interrupted=false;
+        hackable.script.interruptManager.interrupted = false;
+
+
+        if(hackable.script.loadString(codeEditor.getText()))
+        {
+            statusLabel.setColor(Color.LIME);
+            statusLabel.setText("Status: Running");
+        }
+        else
+        {
+            statusLabel.setColor(Color.ORANGE);
+            statusLabel.setText("Status: Compile failed");
+            hackable.script.interruptManager.interrupted = true;
+        }
+
+
     }
 
     //Reset to default
-    private void Reset()
+    private void reset()
     {
         codeEditor.setText(this.originalScript);
     }
 
-    private void hide(Stage stage)
-    {
 
+    //Force interrupt the script in-case user accidently creates infinite loop
+    private void interrupt() {
+        statusLabel.setColor(Color.RED);
+        statusLabel.setText("Status: Stopped");
+        hackable.script.forceInterruption();
     }
+
+    private void addToolTip(Actor widget, String text)
+    {
+        new Tooltip.Builder(text).target(widget).build();
+    }
+
+
+    private VisLabel statusLabel;
     private void setupEditor(Stage stage)
     {
         codeEditor = new HighlightTextArea("Code");
@@ -77,23 +109,42 @@ public class CodeEditor {
 
         //Compile Button
         VisTextButton buttonCompile = new VisTextButton("Compile");
+        addToolTip(buttonCompile, "Compiles and starts the script");
         buttonCompile.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-               Compile();
+               compile();
             }
         });
         buttonsTable.add(buttonCompile);
 
         //Reset Button
         VisTextButton buttonReset = new VisTextButton("Reset");
+        addToolTip(buttonReset, "Resets the script to its original state");
         buttonReset.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                Reset();
+                reset();
             }
         });
         buttonsTable.add(buttonReset);
+
+
+        //Interrupt Button
+        VisTextButton buttonInterrupt = new VisTextButton("Stop");
+        addToolTip(buttonInterrupt, "Stops / Interrupts the script");
+        buttonInterrupt.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                interrupt();
+            }
+        });
+        buttonsTable.add(buttonInterrupt);
+
+        statusLabel = new VisLabel();
+        statusLabel.setColor(Color.LIME);
+        statusLabel.setText("Status: Running");
+        buttonsTable.add(statusLabel);
 
         //Add buttons
         codeWindow.add(buttonsTable).align(Align.left).padLeft(4).padBottom(4);

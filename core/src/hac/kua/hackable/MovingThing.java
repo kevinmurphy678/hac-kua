@@ -15,7 +15,15 @@ public class MovingThing extends Hackable {
 
     public Vector2 position = new Vector2();
 
+    public void Move(int dir){System.out.println("Moved: " + dir);}
+
     public MovingThing() {script = new LuaScript("assets/lua/hello.lua");}
+
+
+    @Override
+    public void interact() {
+        super.interact();
+    }
 
     @Override
     public void interact(Hackable user) {
@@ -23,7 +31,7 @@ public class MovingThing extends Hackable {
     }
 
     @Override
-    public void update(float delta) {
-        super.update(delta);
+    public void update() {
+        super.update();
     }
 }
