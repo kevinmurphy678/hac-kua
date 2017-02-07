@@ -47,15 +47,22 @@ public class LuaScript {
         interruptManager.setInterrupted(true);
     }
 
+
+    public void loadGlobalFunctions()
+    {
+        globals.set("Input", CoerceJavaToLua.coerce(Gdx.input));
+        registerJavaFunction(Call.getInstance());
+    }
+
     //Loads string data into the script
     public boolean loadString(String data) {
         try {
             chunk = globals.load(data);
-            registerJavaFunction(Call.getInstance());
+            loadGlobalFunctions();
+
         } catch (LuaError e) {
             // If reading the file fails, then log the error to the console
             Gdx.app.log("Debug", "LUA ERROR! " + e.getMessage());
-
             return false;
         }
         try {
@@ -70,7 +77,6 @@ public class LuaScript {
         return true;
     }
 
-
     // Load the file
     public boolean load(String scriptFileName) {
         this.scriptFileName = scriptFileName;
@@ -83,21 +89,20 @@ public class LuaScript {
         }
         try {
             chunk = globals.load(Gdx.files.internal(scriptFileName).readString());
-
-            registerJavaFunction(Call.getInstance());
-            //registerJavaFunction(CallNative.getInstance());
-
-
+            loadGlobalFunctions();
         } catch (LuaError e) {
             // If reading the file fails, then log the error to the console
-            Gdx.app.log("Debug", "LUA ERROR! " + e.getMessage());
+            Gdx.app.log("Debug", "LUA ERROR:  " + e.getMessage());
             this.scriptFileExists = false;
             return false;
         }
-
-        // An important step. Calls to script method do not work if the chunk is not called here
-        chunk.call();
-
+        try {
+            chunk.call();
+        }
+        catch(RuntimeException e)
+        {
+            interrupted = true;
+        }
         return true;
     }
 
@@ -135,6 +140,9 @@ public class LuaScript {
             } catch (LuaError e) {
                 // Log the error to the console if failed
                 Gdx.app.log("Debug", "LUA ERROR! " + e.getMessage());
+
+                interruptManager.setInterrupted(true);
+
                 return  LuaValue.FALSE;
             }
 

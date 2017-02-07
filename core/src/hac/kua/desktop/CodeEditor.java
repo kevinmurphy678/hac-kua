@@ -41,6 +41,8 @@ public class CodeEditor {
         setupEditor(Core.stage);
     }
 
+
+
     //Compile Button
     private void compile()
     {
@@ -95,11 +97,22 @@ public class CodeEditor {
     {
         codeEditor = new HighlightTextArea("Code");
 
-        codeWindow = new VisWindow(Hackable_Manager.hackables.findKey(hackable,false));
+        codeWindow = new VisWindow(Hackable_Manager.hackables.findKey(hackable,false)) {
+            @Override
+            public void act(float delta) {
+                if(hackable.script.interruptManager.isInterrupted() || hackable.script.interrupted)
+                {
+                    statusLabel.setColor(Color.RED);
+                    statusLabel.setText("Status: Stopped");
+                }
+            }
+        };
         codeWindow.addCloseButton();
         codeWindow.setSize(600,832);
         codeWindow.setPosition(977,41);
         codeWindow.setResizable(true);
+
+
         TableUtils.setSpacingDefaults(codeWindow);
 
         codeWindow.add(codeEditor.createCompatibleScrollPane()).grow().row();

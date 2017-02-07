@@ -1,13 +1,12 @@
 package hac.kua.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g3d.decals.CameraGroupStrategy;
-import com.badlogic.gdx.graphics.g3d.decals.DecalBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.viewport.FillViewport;
@@ -15,10 +14,10 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bitfire.postprocessing.PostProcessor;
 import com.bitfire.utils.ShaderLoader;
 import hac.kua.GameMap;
+import hac.kua.desktop.CodeEditor;
 import hac.kua.hackable.Hackable;
 import hac.kua.hackable.Hackable_Manager;
 import hac.kua.hackable.MovingThing;
-import hac.kua.desktop.CodeEditor;
 import hac.kua.utils.Core;
 
 
@@ -81,6 +80,8 @@ public class PlayingScreen implements Screen{
         //Updates / input logic
         handleInput();
         Core.assets.update();
+
+
 
 
         //Graphics
