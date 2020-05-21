@@ -51,6 +51,7 @@ public class LuaScript {
     public void loadGlobalFunctions()
     {
         globals.set("Input", CoerceJavaToLua.coerce(Gdx.input));
+        globals.set("Graphics", CoerceJavaToLua.coerce(Gdx.graphics));
         registerJavaFunction(Call.getInstance());
     }
 

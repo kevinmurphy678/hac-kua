@@ -4,10 +4,14 @@ end
 
 function update(self)
     self.position.x = self.position.x + 10
-    self.position.y = self.position.y + 20
+    self.position.y = self.position.y + 10
     --print("updating")
-    if(Input:isButtonPressed(0)) then  print("Left mouse down") end
+    if(Input:isButtonPressed(0)) then
+        self.position.x = Input:getX()
+        self.position.y = Graphics:getHeight() - Input:getY()
+    end
     if(Input:isButtonPressed(1)) then  print("Right mouse down") end
+
     print("Mouse Position :" .. Input:getX() .. " : " .. Input:getY())
 end
 

@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.kotcrab.vis.ui.VisUI;
+import hac.kua.desktop.Taskbar;
 
 /**
  * Created by kevin on 1/21/2017.
@@ -21,6 +22,8 @@ public class Core {
     //Fonts
     public static BitmapFont font;
     public static GlyphLayout fontLayout;
+    public static Taskbar taskbar;
+
     public static void setupFont(){
         fontLayout = new GlyphLayout();
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("assets/gohufont-14.fon"));

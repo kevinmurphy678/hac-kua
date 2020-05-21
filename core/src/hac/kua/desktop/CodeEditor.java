@@ -6,7 +6,10 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.util.TableUtils;
 import com.kotcrab.vis.ui.util.highlight.Highlighter;
@@ -30,17 +33,14 @@ public class CodeEditor {
     public CodeEditor(Hackable hackable)
     {
         this.hackable = hackable;
-
         if(hackable.script.scriptContents == null)
             this.originalScript = Gdx.files.internal(hackable.script.scriptFileName).readString();
         else
             this.originalScript = hackable.script.scriptContents;
 
         this.originalScript =  this.originalScript.replace("\r", "");
-
         setupEditor(Core.stage);
     }
-
 
 
     //Compile Button
@@ -107,11 +107,39 @@ public class CodeEditor {
                 }
             }
         };
-        codeWindow.addCloseButton();
+
+       // codeWindow.addCloseButton();
+
+
+        Label titleLabel = codeWindow.getTitleLabel();
+        Table titleTable = codeWindow.getTitleTable();
+
+        VisImageButton minimizeButton = new VisImageButton("blue");
+        titleTable.add(minimizeButton);
+        minimizeButton.addListener(new ChangeListener() {
+            @Override
+            public void changed (ChangeEvent event, Actor actor) {
+                codeWindow.setVisible(false);
+                Core.taskbar.addItem(codeWindow, codeWindow.getTitleLabel().getText().toString());
+            }
+        });
+
+
+        VisImageButton closeButton = new VisImageButton("close");
+        titleTable.add(closeButton);
+        closeButton.addListener(new ChangeListener() {
+            @Override
+            public void changed (ChangeEvent event, Actor actor) {
+                codeWindow.remove();
+            }
+        });
+
+        if (titleLabel.getLabelAlign() == Align.center && titleTable.getChildren().size == 2)
+            titleTable.getCell(titleLabel).padLeft(closeButton.getWidth() * 2);
+
         codeWindow.setSize(600,832);
         codeWindow.setPosition(977,41);
         codeWindow.setResizable(true);
-
 
         TableUtils.setSpacingDefaults(codeWindow);
 
@@ -165,7 +193,6 @@ public class CodeEditor {
         text = text.replace("\r", "");
         codeEditor.setText(text);
         codeEditor.setFocusTraversal(false);
-
         codeEditor.addListener(new InputListener(){
 
             @Override
@@ -210,9 +237,9 @@ public class CodeEditor {
         //Highlighting
         Highlighter highlighter = new Highlighter();
         //it is much more reliable to use regex for keyword detection
-        highlighter.regex(Color.valueOf("66CCB3"), "\\b(and|end|in|repeat|break|false|local|return|do|for|nil|then|else|function|not|true|elseif|if|or|until|while)\\b");
-        highlighter.regex(Color.CHARTREUSE, "\"(.*?)\"");
-        highlighter.regex(Color.valueOf("75715E"), "(?=--)(.*)(?=[\\r\\n])\n");
+        highlighter.regex(Color.valueOf("00FFFF"), "\\b(and|end|in|repeat|break|false|local|return|do|for|nil|then|else|function|not|true|elseif|if|or|until|while)\\b");
+        highlighter.regex(Color.PINK, "\"(.*?)\"");
+        highlighter.regex(Color.valueOf("FF00FF"), "(?=--)(.*)(?=[\\r\\n])\n");
         codeEditor.setHighlighter(highlighter);
         stage.addActor(codeWindow);
     }

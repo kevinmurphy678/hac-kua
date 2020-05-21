@@ -10,11 +10,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.bitfire.postprocessing.PostProcessor;
-import com.bitfire.utils.ShaderLoader;
 import hac.kua.GameMap;
 import hac.kua.desktop.CodeEditor;
+import hac.kua.desktop.Taskbar;
 import hac.kua.hackable.Hackable;
 import hac.kua.hackable.Hackable_Manager;
 import hac.kua.hackable.MovingThing;
@@ -36,7 +36,6 @@ public class PlayingScreen implements Screen{
 
     private PerspectiveCamera camera3D;
 
-    private PostProcessor postProcessor;
 
     public static Hackable hackable1;
     public static Hackable hackable2;
@@ -51,17 +50,20 @@ public class PlayingScreen implements Screen{
         Core.setupStage();
 
         camera = new OrthographicCamera();
-        viewport = new FillViewport(640,480,camera);
+        viewport = new ScreenViewport(camera);
         batch = new SpriteBatch();
 
         hackable1 = new MovingThing();
         hackable2 = new MovingThing();
         hackable1.interact(hackable1);
-        hackable2.interact(hackable1);
+        hackable2.interact(hackable2);
+
+        Core.taskbar = new Taskbar();
+        Core.taskbar.setupTaskbar(Core.stage);
 
         //Adding to global hackables list
         Hackable_Manager.add("Hack1", hackable1);
-        //Hackable_Manager.add("Hack2", hackable2);
+        Hackable_Manager.add("Hack2", hackable2);
 
         camera3D = new PerspectiveCamera(80, 640, 480);
         camera3D.position.set(0,0,-5);
@@ -73,6 +75,7 @@ public class PlayingScreen implements Screen{
 
         //dBatch = new DecalBatch(new CameraGroupStrategy(camera3D));
         CodeEditor editor = new CodeEditor(hackable1);
+        CodeEditor editor2 = new CodeEditor(hackable2);
     }
     @Override
     public void render(float delta) {
@@ -81,16 +84,10 @@ public class PlayingScreen implements Screen{
         handleInput();
         Core.assets.update();
 
-
-
-
         //Graphics
-        Gdx.gl.glClearColor(0.5f,0.45f,0.6f,1);
+        Gdx.gl.glClearColor(0.1f,0.85f,0.8f,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
         Gdx.gl.glEnable(GL20.GL_DEPTH_TEST);
-
-        postProcessor.capture();
-        postProcessor.setClearColor(0.1f, 0.2f, 0.1f, 0.9f);
 
         //2D drawing/////////
         camera.update();
@@ -103,13 +100,13 @@ public class PlayingScreen implements Screen{
             entry.value.draw(batch);
         }
 
-        gameMap.draw(batch);
+        //gameMap.draw(batch);
 
         batch.end();
         /////////////////////
 
         //3D Drawing
-        camera3D.update();
+        //camera3D.update();
 
         //Stage & HUD Drawing///////
         Stage stage = Core.stage;
@@ -135,8 +132,6 @@ public class PlayingScreen implements Screen{
 
     }
 
-
-
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height);
@@ -145,14 +140,6 @@ public class PlayingScreen implements Screen{
         Stage stage = Core.stage;
         stage.getViewport().update(width, height);
         stage.getCamera().position.set(stage.getCamera().viewportWidth / 2, stage.getCamera().viewportHeight / 2, 0);
-
-        //Post Processing
-        ShaderLoader.BasePath = "assets/shaders/";
-        postProcessor = new PostProcessor(true, true,true);
-
-       // int effectsff = Effect.TweakContrast.v | Effect.PhosphorVibrance.v | Effect.Scanlines.v | Effect.Tint.v;
-        //CrtMonitor crt = new CrtMonitor(width, height, true, true, CrtScreen.RgbMode.ChromaticAberrations, effectsff );
-        //postProcessor.addEffect(crt);
     }
 
     @Override

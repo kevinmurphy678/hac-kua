@@ -1,7 +1,10 @@
 package hac.kua.hackable;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import hac.kua.scripts.LuaScript;
+import hac.kua.utils.Core;
 import org.luaj.vm2.Globals;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.lib.jse.CoerceJavaToLua;
@@ -19,6 +22,12 @@ public class MovingThing extends Hackable {
 
     public MovingThing() {script = new LuaScript("assets/lua/hello.lua");}
 
+
+    @Override
+    public void draw(Batch batch){
+        batch.setColor(Color.WHITE);
+        batch.draw(Core.pixel, position.x, position.y, 32, 32);
+    }
 
     @Override
     public void interact() {
